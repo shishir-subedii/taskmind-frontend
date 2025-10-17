@@ -1,5 +1,6 @@
-import MemberTasks from '@/components/MemberTasks';
+import MemberTaskManagement from "@/components/MemberTaskManagement";
 
-export default function TasksPage() {
-    return <MemberTasks />;
+
+export default function MemberTasksPage() {
+    return <MemberTaskManagement />;
 }

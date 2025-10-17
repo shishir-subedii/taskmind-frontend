@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { useLogout } from '@/lib/helper/auth';
 
 export default function Sidebar() {
     const pathname = usePathname();
@@ -16,11 +17,13 @@ export default function Sidebar() {
         { href: '/superadmin/user-management', label: 'User Management', icon: Users },
     ];
 
-    const handleLogout = () => {
-        toast('Logout attempt', {
-            description: 'This is a static demo. Logout not implemented.',
-        });
+    const { logOut } = useLogout();
+
+    const handleLogout = async () => {
+        await logOut();
+        return;
     };
+    
 
     return (
         <aside className="w-64 h-full bg-white shadow-lg p-6 space-y-6 animate-in slide-in-from-left duration-500">

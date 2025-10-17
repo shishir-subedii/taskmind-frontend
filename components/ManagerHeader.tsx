@@ -7,14 +7,15 @@ import { User, Settings, LogOut, Menu } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import ManagerSidebar from '@/components/ManagerSidebar';
+import { useLogout } from '@/lib/helper/auth';
 
 export default function ManagerHeader() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const { logOut } = useLogout();
 
-    const handleLogout = () => {
-        toast.info('Logout attempt', {
-            description: 'This is a static demo. Logout not implemented.',
-        });
+    const handleLogout = async () => {
+        await logOut();
+        return;
     };
 
     const toggleSidebar = () => {

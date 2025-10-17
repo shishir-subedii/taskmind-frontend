@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
+import { useLogout } from '@/lib/helper/auth';
 
 export default function ManagerSidebar() {
     const [project, setProject] = useState<string | null>(null);
@@ -24,11 +25,13 @@ export default function ManagerSidebar() {
         { href: '/manager/team-management', label: 'Team Management', icon: Users },
     ];
 
-    const handleLogout = () => {
-        toast.info('Logout attempt', {
-            description: 'This is a static demo. Logout not implemented.',
-        });
+    const { logOut } = useLogout();
+
+    const handleLogout = async () => {
+        await logOut();
+        return;
     };
+
 
     // optional: render nothing until client loaded (to avoid mismatch)
     if (project === null) return null;
