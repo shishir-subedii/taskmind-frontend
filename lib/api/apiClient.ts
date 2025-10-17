@@ -14,7 +14,7 @@ class ApiClient {
 
         // Add a request interceptor to include token from cookies
         this.client.interceptors.request.use((config) => {
-            const token = Cookies.get('token');
+            const token = Cookies.get('accessToken');
             if (token) {
                 config.headers = config.headers || {};
                 config.headers['Authorization'] = `Bearer ${token}`;
