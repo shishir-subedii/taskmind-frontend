@@ -6,12 +6,21 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
 export default function ManagerSidebar() {
+    const [project, setProject] = useState<string | null>(null);
     const pathname = usePathname();
+
+    useEffect(() => {
+        const id = Cookies.get('projectId');
+        setProject(id ?? null);
+    }, []);
+
     const navItems = [
         { href: '/manager/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-        { href: '/manager/task-assignment', label: 'Task Assignment', icon: ListTodo },
+        { href: project ? `/manager/tasks/${project}` : '/manager/tasks', label: 'Task Assignment', icon: ListTodo },
         { href: '/manager/team-management', label: 'Team Management', icon: Users },
     ];
 
@@ -20,6 +29,9 @@ export default function ManagerSidebar() {
             description: 'This is a static demo. Logout not implemented.',
         });
     };
+
+    // optional: render nothing until client loaded (to avoid mismatch)
+    if (project === null) return null;
 
     return (
         <aside className="w-64 h-full bg-white shadow-lg p-6 space-y-6 animate-in slide-in-from-left duration-500">
