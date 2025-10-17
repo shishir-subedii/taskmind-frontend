@@ -7,15 +7,18 @@ import { User, Settings, LogOut, Menu } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import MemberSidebar from '@/components/MemberSidebar';
+import { useLogout } from '@/lib/helper/auth';
 
 export default function MemberHeader() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    const handleLogout = () => {
-        toast.info('Logout attempt', {
-            description: 'This is a static demo. Logout not implemented.',
-        });
+    const { logOut } = useLogout();
+
+    const handleLogout = async () => {
+        await logOut();
+        return;
     };
+
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);

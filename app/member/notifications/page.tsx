@@ -1,5 +1,7 @@
-import Notifications from '@/components/Notifications';
+'use client';
 
-export default function NotificationsPage() {
-    return <Notifications />;
+import MemberNotificationManagement from '@/components/MemberNotificationManagement';
+
+export default function MemberNotificationsPage() {
+    return <MemberNotificationManagement />;
 }
