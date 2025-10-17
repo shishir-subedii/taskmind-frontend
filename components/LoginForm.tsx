@@ -40,6 +40,7 @@ export default function LoginForm() {
                         router.push('/superadmin/dashboard');
                     }
                     else if(data.role === 'MANAGER'){
+                        Cookies.set('projectId', data.projectId);
                         router.push('/manager/dashboard');
                     }
                     else if(data.role === 'MEMBER'){
