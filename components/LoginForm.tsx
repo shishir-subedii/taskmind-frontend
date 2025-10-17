@@ -3,18 +3,58 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { authRepo } from '@/lib/repo/authRepo';
+import { useAuthStore } from '@/stores/AuthStore';
 import { LogIn } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = () => {
-        toast('Login attempt', {
-            description: 'This is a static demo. Login not implemented.',
-        });
+    const setTokens = useAuthStore((state) => state.setTokens);
+    const router = useRouter();
+
+    const handleSubmit = async () => {
+        if (!email || !password) {
+            toast.error('Please enter both email and password.');
+            return;
+        }
+        setLoading(true);
+        try {
+            await authRepo.login({
+                email,
+                password,
+                onSuccess: (data: any) => {
+                    toast.success('Login successful');
+                    setTokens(data.accessToken, data.role);
+                    Cookies.set('accessToken', data.accessToken);
+                    Cookies.set('role', data.role);
+                    setEmail('');
+                    setPassword('');
+                    if(data.role === 'SUPERADMIN'){
+                        router.push('/superadmin/dashboard');
+                    }
+                    else if(data.role === 'MANAGER'){
+                        router.push('/manager/dashboard');
+                    }
+                    else if(data.role === 'MEMBER'){
+                        router.push('/member/dashboard');
+                    }
+                },
+                onError: (message) => {
+                    toast.error(message);
+                },
+            })
+        } catch (error) {
+            toast.error('Login failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -45,11 +85,12 @@ export default function LoginForm() {
                     />
                 </div>
                 <Button
+                    disabled={loading}
                     onClick={handleSubmit}
                     className="w-full cursor-pointer bg-slate-800 hover:bg-slate-900 transition-colors duration-300"
                 >
                     <LogIn className="w-4 h-4 mr-2" />
-                    Sign In
+                    {loading ? 'Signing In...' : 'Sign In'}
                 </Button>
             </div>
         </div>
